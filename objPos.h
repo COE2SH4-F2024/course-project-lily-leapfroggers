@@ -14,9 +14,12 @@ class objPos
         Pos* pos;        
         char symbol;
 
-        objPos();
-        objPos(int xPos, int yPos, char sym);
-        
+        objPos(); //Default Constructor
+        objPos(int xPos, int yPos, char sym); //Alternative Constructor
+        objPos(const objPos &sObjPos); //Copy Constructor
+        objPos& operator=(const objPos&); //Copy Assignment Operator
+        ~objPos(); //Destructor
+
         // Respect the rule of six / minimum four
         // [TODO] Implement the missing special member functions to meet the minimum four rule
         
