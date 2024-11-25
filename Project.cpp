@@ -51,8 +51,6 @@ void GetInput(void)
         input = MacUILib_getChar();
         gameMechsRef->setInput(input);  // Use a method in GameMechs
     }
-    cout << "Input is: " << input << endl;
-    cout << "Input stored is: "<< gameMechsRef->getInput() << endl;
 }
 
 void RunLogic(void)
