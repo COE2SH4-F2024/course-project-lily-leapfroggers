@@ -30,6 +30,9 @@ void Player::updatePlayerDir()
 
         switch (input)
         {
+            case ' ':  // exit
+                mainGameMechsRef->setExitTrue();
+                break;
             case 'w':
                 if (myDir != DOWN) myDir = UP;
                 break;
@@ -41,6 +44,13 @@ void Player::updatePlayerDir()
                 break;
             case 'd':
                 if (myDir != LEFT) myDir = RIGHT;
+                break;
+            // cases for testing
+            case 'l':
+                mainGameMechsRef->setLoseFlag();
+                break;
+            case '0':
+                mainGameMechsRef->incrementScore();
                 break;
         }
         mainGameMechsRef->clearInput();
@@ -63,12 +73,12 @@ void Player::movePlayer()
             if (playerPos.pos->y > 1) {
                 playerPos.pos->y -= 1;  // Move up
             } else {
-                playerPos.pos->y = maxY;  // Wrap around to the bottom, skip border
+                playerPos.pos->y = maxY - 1;  // Wrap around to the bottom, skip border
             }
             break;
 
         case DOWN:
-            if (playerPos.pos->y < maxY) {
+            if (playerPos.pos->y < maxY - 1) {
                 playerPos.pos->y += 1;  // Move down
             } else {
                 playerPos.pos->y = 1;  // Wrap around to the top, skip border
@@ -79,12 +89,12 @@ void Player::movePlayer()
             if (playerPos.pos->x > 1) {
                 playerPos.pos->x -= 1;  // Move left
             } else {
-                playerPos.pos->x = maxX;  // Wrap around to the right, skip border
+                playerPos.pos->x = maxX - 1;  // Wrap around to the right, skip border
             }
             break;
 
         case RIGHT:
-            if (playerPos.pos->x < maxX) {
+            if (playerPos.pos->x < maxX - 1) {
                 playerPos.pos->x += 1;  // Move right
             } else {
                 playerPos.pos->x = 1;  // Wrap around to the left, skip border
