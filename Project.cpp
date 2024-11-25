@@ -8,8 +8,6 @@ using namespace std;
 
 #define DELAY_CONST 100000
 
-bool exitFlag;
-
 void Initialize(void);
 void GetInput(void);
 void RunLogic(void);
@@ -25,7 +23,7 @@ int main(void)
 
     Initialize();
 
-    while(exitFlag == false)  
+    while(gameMechsRef->getExitFlagStatus() == false)
     {
         GetInput();
         RunLogic();
@@ -42,7 +40,6 @@ void Initialize(void)
 {
     MacUILib_init();
     MacUILib_clearScreen();
-    exitFlag = false;
     gameMechsRef = new GameMechs();  // Create a new GameMechs object
     playerObj = new Player(gameMechsRef);  // Pass GameMechs reference
 }
@@ -54,8 +51,8 @@ void GetInput(void)
         input = MacUILib_getChar();
         gameMechsRef->setInput(input);  // Use a method in GameMechs
     }
-    MacUILib_printf("Input is: %c\n", input);
-    MacUILib_printf("Input stored is: %c\n", gameMechsRef->getInput());
+    cout << "Input is: " << input << endl;
+    cout << "Input stored is: "<< gameMechsRef->getInput() << endl;
 }
 
 void RunLogic(void)
@@ -71,6 +68,7 @@ void DrawScreen(void) {
 
     // Debug output to verify position
     cout << "Player Position: (" << playerPosCopy.pos->x << ", " << playerPosCopy.pos->y << ")" << endl;
+    cout << "Food Position: (" << gameMechsRef->getFoodInfo().pos->x << ", " << gameMechsRef->getFoodInfo().pos->y << ")" << endl;
 
     for (int row = 0; row < 10; row++) 
     {
@@ -85,6 +83,8 @@ void DrawScreen(void) {
         }
         MacUILib_printf("\n");
     }
+
+    cout << "Score: " << gameMechsRef->getScore() << endl;
 }
 
 
@@ -98,6 +98,10 @@ void LoopDelay(void)
 
 void CleanUp(void) {
     MacUILib_clearScreen();
+    if(gameMechsRef->getLoseFlagStatus() == true)
+    {
+    cout << "You Lose!" << endl;
+    }
     MacUILib_uninit();
     delete playerObj;
     delete gameMechsRef;  // Prevent memory leaks
