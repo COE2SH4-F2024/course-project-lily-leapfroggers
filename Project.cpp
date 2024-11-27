@@ -42,6 +42,7 @@ void Initialize(void)
     MacUILib_clearScreen();
     gameMechsRef = new GameMechs();  // Create a new GameMechs object
     playerObj = new Player(gameMechsRef);  // Pass GameMechs reference
+    gameMechsRef->generateFood(playerObj->getPlayerPos());
 }
 
 void GetInput(void)
@@ -61,6 +62,7 @@ void RunLogic(void)
 
 void DrawScreen(void) {
     MacUILib_clearScreen();
+<<<<<<< HEAD
 
     //Getting the player position list object
     objPosArrayList& playerPositions = playerObj->getPlayerPos();
@@ -69,6 +71,16 @@ void DrawScreen(void) {
     // Debug output to verify position
     cout << "Player Position: (" << playerPositions.getHeadElement().pos->x << ", " << playerPositions.getHeadElement().pos->y << ")" << endl;
     cout << "Food Position: (" << gameMechsRef->getFoodInfo().pos->x << ", " << gameMechsRef->getFoodInfo().pos->y << ")" << endl;
+=======
+    objPos playerPosition = playerObj->getPlayerPos();  // Get the player's position object
+    objPos playerPosCopy = playerPosition.getObjPos();  // Get the actual position and symbol from the objPos
+    objPos foodPosition = gameMechsRef->getFoodPos();   // Get the food's postition object
+    objPos foodPosCopy = foodPosition.getObjPos();
+
+    // Debug output to verify position
+    MacUILib_printf("Player Position: (%d, %d)\n", playerPosCopy.pos->x, playerPosCopy.pos->y);
+    MacUILib_printf("Food Info: {%d, %d, %c}\n", foodPosCopy.pos->x, foodPosCopy.pos->y, foodPosCopy.symbol);
+>>>>>>> jamese13Iteration2B
 
     bool contained;
     char symbol;
@@ -92,6 +104,7 @@ void DrawScreen(void) {
             if (row == 0 || row == 9 || col == 0 || col == 19) 
             {
                 MacUILib_printf("%c", '#');
+<<<<<<< HEAD
             } 
             else if (contained == true) 
             {
@@ -99,13 +112,22 @@ void DrawScreen(void) {
             } 
             else 
             {
+=======
+            } else if (row == playerPosCopy.pos->y && col == playerPosCopy.pos->x) {
+                MacUILib_printf("%c", playerPosCopy.getSymbol());  // Access the symbol
+            } else if (row == foodPosCopy.pos->y && col == foodPosCopy.pos->x) {
+                MacUILib_printf("%c", foodPosCopy.getSymbol());
+            } else {
+>>>>>>> jamese13Iteration2B
                 MacUILib_printf(" ");
             }
         }
         MacUILib_printf("\n");
     }
 
-    cout << "Score: " << gameMechsRef->getScore() << endl;
+    MacUILib_printf("Score: %d\n", gameMechsRef->getScore());
+    MacUILib_printf("\nDebug Keys: 'l' = lose flag, '0' = increment score, 'f' = generate food\n");
+    
 }
 
 
