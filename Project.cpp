@@ -42,6 +42,7 @@ void Initialize(void)
     MacUILib_clearScreen();
     gameMechsRef = new GameMechs();  // Create a new GameMechs object
     playerObj = new Player(gameMechsRef);  // Pass GameMechs reference
+    gameMechsRef->generateFood(playerObj->getPlayerPos());
 }
 
 void GetInput(void)
@@ -63,10 +64,12 @@ void DrawScreen(void) {
     MacUILib_clearScreen();
     objPos playerPosition = playerObj->getPlayerPos();  // Get the player's position object
     objPos playerPosCopy = playerPosition.getObjPos();  // Get the actual position and symbol from the objPos
+    objPos foodPosition = gameMechsRef->getFoodPos();   // Get the food's postition object
+    objPos foodPosCopy = foodPosition.getObjPos();
 
     // Debug output to verify position
-    cout << "Player Position: (" << playerPosCopy.pos->x << ", " << playerPosCopy.pos->y << ")" << endl;
-    cout << "Food Position: (" << gameMechsRef->getFoodInfo().pos->x << ", " << gameMechsRef->getFoodInfo().pos->y << ")" << endl;
+    MacUILib_printf("Player Position: (%d, %d)\n", playerPosCopy.pos->x, playerPosCopy.pos->y);
+    MacUILib_printf("Food Info: {%d, %d, %c}\n", foodPosCopy.pos->x, foodPosCopy.pos->y, foodPosCopy.symbol);
 
     for (int row = 0; row < 10; row++) 
     {
@@ -75,6 +78,8 @@ void DrawScreen(void) {
                 MacUILib_printf("%c", '#');
             } else if (row == playerPosCopy.pos->y && col == playerPosCopy.pos->x) {
                 MacUILib_printf("%c", playerPosCopy.getSymbol());  // Access the symbol
+            } else if (row == foodPosCopy.pos->y && col == foodPosCopy.pos->x) {
+                MacUILib_printf("%c", foodPosCopy.getSymbol());
             } else {
                 MacUILib_printf(" ");
             }
@@ -82,7 +87,9 @@ void DrawScreen(void) {
         MacUILib_printf("\n");
     }
 
-    cout << "Score: " << gameMechsRef->getScore() << endl;
+    MacUILib_printf("Score: %d\n", gameMechsRef->getScore());
+    MacUILib_printf("\nDebug Keys: 'l' = lose flag, '0' = increment score, 'f' = generate food\n");
+    
 }
 
 

@@ -43,7 +43,8 @@ class GameMechs
         void incrementScore();
         
         // More methods should be added here
-        objPos getFoodInfo() const;
+        void generateFood(objPos blockOff);
+        objPos getFoodPos() const;
 };
 
 #endif
