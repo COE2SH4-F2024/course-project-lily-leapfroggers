@@ -9,10 +9,6 @@ GameMechs::GameMechs()
 
     boardSizeX = 20;
     boardSizeY = 10;
-
-    food.pos->x = 0;
-    food.pos->y = 0;
-    food.symbol = '*';
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -27,16 +23,12 @@ GameMechs::GameMechs(int boardX, int boardY)
 
     if (boardY < 3) {boardSizeY = 10;}
     else {boardSizeY = boardY;}
-
-    food.pos->x = 0;
-    food.pos->y = 0;
-    food.symbol = '*';
 }
 
 // do you need a destructor?
 GameMechs::~GameMechs()
 {
-    delete food.pos;
+    
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -98,7 +90,27 @@ void GameMechs::clearInput()
 }
 
 // More methods should be added here
-objPos GameMechs::getFoodInfo() const
+void GameMechs::generateFood(objPos blockOff)
+{
+    srand(time(NULL));
+    int upperLim_x = boardSizeX - 2, upperLim_y = boardSizeY - 2;
+    int candX, candY;
+    objPos candidate;
+
+    do
+    {
+        candX = (rand() % upperLim_x) + 1; // x-coordinate candidate
+        candY = (rand() % upperLim_y) + 1; // y-coordinate candidate
+    } while (candX == blockOff.pos->x && candY == blockOff.pos->y); // same as player location
+
+    candidate.pos->x = candX;
+    candidate.pos->y = candY;
+    candidate.symbol = '*';
+
+    food.setObjPos(candidate);
+}
+
+objPos GameMechs::getFoodPos() const
 {
     return food;
 }

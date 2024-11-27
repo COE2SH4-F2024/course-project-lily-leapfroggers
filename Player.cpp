@@ -45,12 +45,15 @@ void Player::updatePlayerDir()
             case 'd':
                 if (myDir != LEFT) myDir = RIGHT;
                 break;
-            // cases for testing
+            // debug keys for testing
             case 'l':
                 mainGameMechsRef->setLoseFlag();
                 break;
             case '0':
                 mainGameMechsRef->incrementScore();
+                break;
+            case 'f':
+                mainGameMechsRef->generateFood(playerPos);
                 break;
         }
         mainGameMechsRef->clearInput();
