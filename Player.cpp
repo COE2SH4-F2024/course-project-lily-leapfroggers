@@ -4,23 +4,29 @@
 
 Player::Player(GameMechs* thisGMRef)
 {
+    playerPosList = new objPosArrayList;
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    playerPos.setObjPos(5, 5, '@');
+    playerPosList->insertHead(objPos(5, 5, '*'));
+    playerPosList->insertTail(objPos(5, 6, '*'));
+    playerPosList->insertTail(objPos(5, 7, '*'));
+    playerPosList->insertTail(objPos(5, 8, '*'));
+    playerPosList->insertTail(objPos(5, 9, '*'));
     // more actions to be included
 }
 
 
 Player::~Player()
 {
+    delete[] playerPosList;
     // delete any heap members here
 }
 
-objPos Player::getPlayerPos() const
+objPosArrayList& Player::getPlayerPos() const
 {
-    return playerPos;
-    // return the reference to the playerPos arrray list
+    return *playerPosList; // Return a reference to the entire playerPosList
 }
+
 
 void Player::updatePlayerDir()
 {
@@ -66,11 +72,14 @@ void Player::movePlayer()
     // Get the board size limits
     int maxX = mainGameMechsRef->getBoardSizeX() - 1;  // maxX is 19, valid x is from 1 to 18
     int maxY = mainGameMechsRef->getBoardSizeY() - 1;  // maxY is 9, valid y is from 1 to 8
+    
+    objPos playerPos = playerPosList->getHeadElement();
 
     // Move player based on the current direction
     switch (myDir) {
         case UP:
-            if (playerPos.pos->y > 1) {
+            if (playerPos.pos->y > 1) 
+            {
                 playerPos.pos->y -= 1;  // Move up
             } else {
                 playerPos.pos->y = maxY - 1;  // Wrap around to the bottom, skip border
@@ -78,7 +87,8 @@ void Player::movePlayer()
             break;
 
         case DOWN:
-            if (playerPos.pos->y < maxY - 1) {
+            if (playerPos.pos->y < maxY - 1) 
+            {
                 playerPos.pos->y += 1;  // Move down
             } else {
                 playerPos.pos->y = 1;  // Wrap around to the top, skip border
@@ -86,7 +96,8 @@ void Player::movePlayer()
             break;
 
         case LEFT:
-            if (playerPos.pos->x > 1) {
+            if (playerPos.pos->x > 1) 
+            {
                 playerPos.pos->x -= 1;  // Move left
             } else {
                 playerPos.pos->x = maxX - 1;  // Wrap around to the right, skip border
@@ -94,7 +105,8 @@ void Player::movePlayer()
             break;
 
         case RIGHT:
-            if (playerPos.pos->x < maxX - 1) {
+            if (playerPos.pos->x < maxX - 1) 
+            {
                 playerPos.pos->x += 1;  // Move right
             } else {
                 playerPos.pos->x = 1;  // Wrap around to the left, skip border
@@ -105,6 +117,10 @@ void Player::movePlayer()
             // No movement if the direction is STOP or invalid
             break;
     }
+
+    playerPosList->insertHead(objPos(playerPos.pos->x, playerPos.pos->y, '*'));
+
+    playerPosList->removeTail();
 
     // Debugging output to check the player's position
     MacUILib_printf("Player moved to: %d, %d\n", playerPos.pos->x, playerPos.pos->y);

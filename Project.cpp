@@ -61,21 +61,44 @@ void RunLogic(void)
 
 void DrawScreen(void) {
     MacUILib_clearScreen();
-    objPos playerPosition = playerObj->getPlayerPos();  // Get the player's position object
-    objPos playerPosCopy = playerPosition.getObjPos();  // Get the actual position and symbol from the objPos
+
+    //Getting the player position list object
+    objPosArrayList& playerPositions = playerObj->getPlayerPos();
+    objPos foodPosition = gameMechsRef->getFoodInfo(); // Get food position
 
     // Debug output to verify position
-    cout << "Player Position: (" << playerPosCopy.pos->x << ", " << playerPosCopy.pos->y << ")" << endl;
+    cout << "Player Position: (" << playerPositions.getHeadElement().pos->x << ", " << playerPositions.getHeadElement().pos->y << ")" << endl;
     cout << "Food Position: (" << gameMechsRef->getFoodInfo().pos->x << ", " << gameMechsRef->getFoodInfo().pos->y << ")" << endl;
+
+    bool contained;
+    char symbol;
 
     for (int row = 0; row < 10; row++) 
     {
-        for (int col = 0; col < 20; col++) {
-            if (row == 0 || row == 9 || col == 0 || col == 19) {
+        for (int col = 0; col < 20; col++) 
+        {
+            contained = false;
+
+            //Checking if the player will occupy the position
+            for (int i = 0; i < playerPositions.getSize(); ++i) 
+            {
+                if (playerPositions.getElement(i).pos->x == col && playerPositions.getElement(i).pos->y == row) 
+                {
+                    contained = true;
+                    symbol = (playerPositions.getElement(i)).getSymbol();
+                }
+            }
+
+            if (row == 0 || row == 9 || col == 0 || col == 19) 
+            {
                 MacUILib_printf("%c", '#');
-            } else if (row == playerPosCopy.pos->y && col == playerPosCopy.pos->x) {
-                MacUILib_printf("%c", playerPosCopy.getSymbol());  // Access the symbol
-            } else {
+            } 
+            else if (contained == true) 
+            {
+                MacUILib_printf("%c", symbol);  // Access the symbol
+            } 
+            else 
+            {
                 MacUILib_printf(" ");
             }
         }
