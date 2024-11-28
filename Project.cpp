@@ -23,7 +23,7 @@ int main(void)
 
     Initialize();
 
-    while(gameMechsRef->getExitFlagStatus() == false)
+    while(!(gameMechsRef->getExitFlagStatus()))
     {
         GetInput();
         RunLogic();
@@ -68,6 +68,7 @@ void DrawScreen(void) {
 
     // Debug output to verify position
     MacUILib_printf("Head Position: (%d, %d)\n", playerPositions->getHeadElement().pos->x, playerPositions->getHeadElement().pos->y);
+    MacUILib_printf("List Size: %d\n", playerPositions->getSize());
     MacUILib_printf("Food Info: {%d, %d, %c}\n", foodPosition.pos->x, foodPosition.pos->y, foodPosition.symbol);
 
     bool contained;
@@ -103,9 +104,9 @@ void DrawScreen(void) {
         MacUILib_printf("\n");
     }
 
-    MacUILib_printf("Score: %d\n", playerPositions->getSize() - 1);
+    MacUILib_printf("Score: %d\n", gameMechsRef->getScore());
     MacUILib_printf("\nDebug Keys: 'l' = lose flag, '0' = increment score, 'f' = generate food\n");
-    
+    cout << "Self Colision: " << playerObj->checkSelfCollision() << endl;
 }
 
 
