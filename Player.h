@@ -20,11 +20,13 @@ class Player
         Player(GameMechs* thisGMRef);
         ~Player();
 
-        objPosArrayList& getPlayerPos() const; // Upgraded this in iteration 3.       
+        objPosArrayList* getPlayerPos() const; // Upgrsaded this in iteration 3.       
         void updatePlayerDir();
         void movePlayer();
 
         // More methods to be added here
+        bool checkFoodConsumption();
+        void increasePlayerLength();
 
     private:
         objPosArrayList* playerPosList; // Upgraded this as apart of iteration 3.       

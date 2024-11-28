@@ -90,27 +90,34 @@ void GameMechs::clearInput()
 }
 
 // More methods should be added here
-void GameMechs::generateFood(objPos blockOff)
+void GameMechs::generateFood(objPosArrayList* blockOff)
 {
     srand(time(NULL));
+
+    int i = 0;
     int upperLim_x = boardSizeX - 2, upperLim_y = boardSizeY - 2;
-    int candX, candY;
+
+    int candX = (rand() % upperLim_x) + 1, candY = (rand() % upperLim_y) + 1;
     objPos candidate;
 
-    do
+    while(i < blockOff->getSize())
     {
-        candX = (rand() % upperLim_x) + 1; // x-coordinate candidate
-        candY = (rand() % upperLim_y) + 1; // y-coordinate candidate
-    } while (candX == blockOff.pos->x && candY == blockOff.pos->y); // same as player location
+        if (candX == blockOff->getElement(i).pos->x && candY == blockOff->getElement(i).pos->y)
+        {
+            int candX = (rand() % upperLim_x) + 1;
+            int candY = (rand() % upperLim_y) + 1;
+        }
+        else {i++;}
+    }
 
     candidate.pos->x = candX;
     candidate.pos->y = candY;
-    candidate.symbol = '*';
+    candidate.symbol = 233;
 
-    food.setObjPos(candidate);
+    foodPos.setObjPos(candidate);
 }
 
 objPos GameMechs::getFoodPos() const
 {
-    return food;
+    return foodPos;
 }

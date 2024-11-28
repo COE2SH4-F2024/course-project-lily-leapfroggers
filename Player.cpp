@@ -7,11 +7,11 @@ Player::Player(GameMechs* thisGMRef)
     playerPosList = new objPosArrayList;
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    playerPosList->insertHead(objPos(5, 5, '*'));
-    playerPosList->insertTail(objPos(5, 6, '*'));
-    playerPosList->insertTail(objPos(5, 7, '*'));
-    playerPosList->insertTail(objPos(5, 8, '*'));
-    playerPosList->insertTail(objPos(5, 9, '*'));
+    playerPosList->insertHead(objPos(5, 5, 254));
+    // playerPosList->insertTail(objPos(5, 6, '*'));
+    // playerPosList->insertTail(objPos(5, 7, '*'));
+    // playerPosList->insertTail(objPos(5, 8, '*'));
+    // playerPosList->insertTail(objPos(5, 9, '*'));
     // more actions to be included
 }
 
@@ -22,9 +22,9 @@ Player::~Player()
     // delete any heap members here
 }
 
-objPosArrayList& Player::getPlayerPos() const
+objPosArrayList* Player::getPlayerPos() const
 {
-    return *playerPosList; // Return a reference to the entire playerPosList
+    return playerPosList; // Return a reference to the entire playerPosList
 }
 
 
@@ -59,7 +59,7 @@ void Player::updatePlayerDir()
                 mainGameMechsRef->incrementScore();
                 break;
             case 'f':
-                mainGameMechsRef->generateFood(playerPos);
+                mainGameMechsRef->generateFood(playerPosList);
                 break;
         }
         mainGameMechsRef->clearInput();
@@ -73,8 +73,8 @@ void Player::movePlayer()
     if (mainGameMechsRef == nullptr) return;
 
     // Get the board size limits
-    int maxX = mainGameMechsRef->getBoardSizeX() - 1;  // maxX is 19, valid x is from 1 to 18
-    int maxY = mainGameMechsRef->getBoardSizeY() - 1;  // maxY is 9, valid y is from 1 to 8
+    int maxX = mainGameMechsRef->getBoardSizeX() - 2;  // maxX is 18, valid x is from 1 to 18
+    int maxY = mainGameMechsRef->getBoardSizeY() - 2;  // maxY is 8, valid y is from 1 to 8
     
     objPos playerPos = playerPosList->getHeadElement();
 
@@ -85,12 +85,12 @@ void Player::movePlayer()
             {
                 playerPos.pos->y -= 1;  // Move up
             } else {
-                playerPos.pos->y = maxY - 1;  // Wrap around to the bottom, skip border
+                playerPos.pos->y = maxY;  // Wrap around to the bottom, skip border
             }
             break;
 
         case DOWN:
-            if (playerPos.pos->y < maxY - 1) 
+            if (playerPos.pos->y < maxY) 
             {
                 playerPos.pos->y += 1;  // Move down
             } else {
@@ -103,12 +103,12 @@ void Player::movePlayer()
             {
                 playerPos.pos->x -= 1;  // Move left
             } else {
-                playerPos.pos->x = maxX - 1;  // Wrap around to the right, skip border
+                playerPos.pos->x = maxX;  // Wrap around to the right, skip border
             }
             break;
 
         case RIGHT:
-            if (playerPos.pos->x < maxX - 1) 
+            if (playerPos.pos->x < maxX) 
             {
                 playerPos.pos->x += 1;  // Move right
             } else {
@@ -121,15 +121,36 @@ void Player::movePlayer()
             break;
     }
 
-    playerPosList->insertHead(objPos(playerPos.pos->x, playerPos.pos->y, '*'));
-
-    playerPosList->removeTail();
+    playerPosList->insertHead(objPos(playerPos.pos->x, playerPos.pos->y, 254));
+    increasePlayerLength();
 
     // Debugging output to check the player's position
     MacUILib_printf("Player moved to: %d, %d\n", playerPos.pos->x, playerPos.pos->y);
 }
 
 
-
-
 // More methods to be added
+bool Player::checkFoodConsumption()
+{
+    objPos playerPos = playerPosList->getHeadElement();
+    objPos foodPos = mainGameMechsRef->getFoodPos();
+
+    int playerX = playerPos.pos->x, playerY = playerPos.pos->y;
+    int foodX = foodPos.pos->x, foodY = foodPos.pos->y;
+
+    if(playerX == foodX && playerY == foodY) { return true; }
+    else { return false; }
+}
+
+void Player::increasePlayerLength()
+{
+    if(checkFoodConsumption())
+    {
+        mainGameMechsRef->generateFood(playerPosList);
+        mainGameMechsRef->incrementScore();
+    }
+    else 
+    {
+        playerPosList->removeTail();
+    }
+}
