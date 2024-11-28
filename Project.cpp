@@ -62,24 +62,40 @@ void RunLogic(void)
 
 void DrawScreen(void) {
     MacUILib_clearScreen();
-    objPos playerPosition = playerObj->getPlayerPos();  // Get the player's position object
-    objPos playerPosCopy = playerPosition.getObjPos();  // Get the actual position and symbol from the objPos
-    objPos foodPosition = gameMechsRef->getFoodPos();   // Get the food's postition object
-    objPos foodPosCopy = foodPosition.getObjPos();
+
+    objPosArrayList* playerPositions = playerObj->getPlayerPos();  // Getting the player position list object
+    objPos foodPosition = gameMechsRef->getFoodPos(); // Get the food's position object
 
     // Debug output to verify position
-    MacUILib_printf("Player Position: (%d, %d)\n", playerPosCopy.pos->x, playerPosCopy.pos->y);
-    MacUILib_printf("Food Info: {%d, %d, %c}\n", foodPosCopy.pos->x, foodPosCopy.pos->y, foodPosCopy.symbol);
+    MacUILib_printf("Head Position: (%d, %d)\n", playerPositions->getHeadElement().pos->x, playerPositions->getHeadElement().pos->y);
+    MacUILib_printf("Food Info: {%d, %d, %c}\n", foodPosition.pos->x, foodPosition.pos->y, foodPosition.symbol);
 
-    for (int row = 0; row < 10; row++) 
+    bool contained;
+    char symbol;
+
+    for (int row = 0; row < gameMechsRef->getBoardSizeY(); row++) 
     {
-        for (int col = 0; col < 20; col++) {
-            if (row == 0 || row == 9 || col == 0 || col == 19) {
+        for (int col = 0; col < gameMechsRef->getBoardSizeX(); col++) 
+        {
+            contained = false;
+
+            //Checking if the player will occupy the position
+            for (int i = 0; i < playerPositions->getSize(); ++i) 
+            {
+                if (playerPositions->getElement(i).pos->x == col && playerPositions->getElement(i).pos->y == row) 
+                {
+                    contained = true;
+                    symbol = (playerPositions->getElement(i)).getSymbol();
+                }
+            }
+
+            if (row == 0 || row == 9 || col == 0 || col == 19) 
+            {
                 MacUILib_printf("%c", '#');
-            } else if (row == playerPosCopy.pos->y && col == playerPosCopy.pos->x) {
-                MacUILib_printf("%c", playerPosCopy.getSymbol());  // Access the symbol
-            } else if (row == foodPosCopy.pos->y && col == foodPosCopy.pos->x) {
-                MacUILib_printf("%c", foodPosCopy.getSymbol());
+            } else if (contained) {
+                MacUILib_printf("%c", symbol);  // Access the symbol
+            } else if (row == foodPosition.pos->y && col == foodPosition.pos->x) {
+                MacUILib_printf("%c", foodPosition.getSymbol());
             } else {
                 MacUILib_printf(" ");
             }
@@ -87,7 +103,7 @@ void DrawScreen(void) {
         MacUILib_printf("\n");
     }
 
-    MacUILib_printf("Score: %d\n", gameMechsRef->getScore());
+    MacUILib_printf("Score: %d\n", playerPositions->getSize() - 1);
     MacUILib_printf("\nDebug Keys: 'l' = lose flag, '0' = increment score, 'f' = generate food\n");
     
 }
