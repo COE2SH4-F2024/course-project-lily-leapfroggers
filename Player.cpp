@@ -120,9 +120,19 @@ void Player::movePlayer()
             // No movement if the direction is STOP or invalid
             break;
     }
-
     playerPosList->insertHead(objPos(playerPos.pos->x, playerPos.pos->y, 254));
+
+    // check for food consumption
     increasePlayerLength();
+
+    // Check for self colision
+    if(checkSelfCollision())
+    {
+        mainGameMechsRef->setLoseFlag();
+        mainGameMechsRef->setExitTrue();
+    }
+
+    
 
     // Debugging output to check the player's position
     MacUILib_printf("Player moved to: %d, %d\n", playerPos.pos->x, playerPos.pos->y);
@@ -153,4 +163,17 @@ void Player::increasePlayerLength()
     {
         playerPosList->removeTail();
     }
+}
+
+bool Player::checkSelfCollision()
+{
+    for(int i = 1; i < playerPosList->getSize(); i++)
+    {
+        if (playerPosList->getElement(0).pos->x == playerPosList->getElement(i).pos->x && 
+                playerPosList->getElement(0).pos->y == playerPosList->getElement(i).pos->y)
+        {
+            return true;
+        }
+    }
+    return false;
 }

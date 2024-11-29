@@ -76,7 +76,6 @@ void GameMechs::setExitTrue()
 void GameMechs::setLoseFlag()
 {
     loseFlag = true;
-    exitFlag = true;
 }
 
 void GameMechs::setInput(char this_input)
@@ -107,7 +106,7 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
             int candX = (rand() % upperLim_x) + 1;
             int candY = (rand() % upperLim_y) + 1;
         }
-        else {i++;}
+        else { i++; }
     }
 
     candidate.pos->x = candX;
