@@ -66,11 +66,6 @@ void DrawScreen(void) {
     objPosArrayList* playerPositions = playerObj->getPlayerPos();  // Getting the player position list object
     objPos foodPosition = gameMechsRef->getFoodPos(); // Get the food's position object
 
-    // Debug output to verify position
-    MacUILib_printf("Head Position: (%d, %d)\n", playerPositions->getHeadElement().pos->x, playerPositions->getHeadElement().pos->y);
-    MacUILib_printf("List Size: %d\n", playerPositions->getSize());
-    MacUILib_printf("Food Info: {%d, %d, %c}\n", foodPosition.pos->x, foodPosition.pos->y, foodPosition.symbol);
-
     bool contained;
     char symbol;
 
@@ -105,8 +100,22 @@ void DrawScreen(void) {
     }
 
     MacUILib_printf("Score: %d\n", gameMechsRef->getScore());
-    MacUILib_printf("\nDebug Keys: 'l' = lose flag, '0' = increment score, 'f' = generate food\n");
-    cout << "Self Colision: " << playerObj->checkSelfCollision() << endl;
+
+    MacUILib_printf("\nToggle Debug Mode: Backspace\n");
+
+    if(gameMechsRef->getDebugFlagStatus())
+    {
+        MacUILib_printf("\n------------------------ Debugging Controls ---------------------------\n");
+        MacUILib_printf("Debug Keys: 'l' = lose flag, '0' = increment score, 'f' = generate food\n");
+
+        // Debug output to verify position
+        MacUILib_printf("\nHead Position: (%d, %d)\n", playerPositions->getHeadElement().pos->x, playerPositions->getHeadElement().pos->y);
+        MacUILib_printf("List Size: %d\n", playerPositions->getSize());
+        MacUILib_printf("Food Info: {%d, %d, %c}\n", foodPosition.pos->x, foodPosition.pos->y, foodPosition.symbol);
+        MacUILib_printf("Self Colision Bool: %d\n", playerObj->checkSelfCollision());
+    }
+
+    
 }
 
 

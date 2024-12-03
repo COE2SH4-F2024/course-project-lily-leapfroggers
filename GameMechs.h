@@ -22,6 +22,8 @@ class GameMechs
 
         objPos foodPos;
 
+        bool debugFlag;
+
     public:
         GameMechs();
         GameMechs(int boardX, int boardY);
@@ -45,6 +47,9 @@ class GameMechs
         // More methods should be added here
         void generateFood(objPosArrayList* blockOff);
         objPos getFoodPos() const;
+
+        void toggleDebugFlag();
+        bool getDebugFlagStatus();
 };
 
 #endif

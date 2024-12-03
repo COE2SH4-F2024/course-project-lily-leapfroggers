@@ -52,6 +52,9 @@ void Player::updatePlayerDir()
                 if (myDir != LEFT) myDir = RIGHT;
                 break;
             // debug keys for testing
+            case '\b':
+                mainGameMechsRef->toggleDebugFlag();
+                break;
             case 'l':
                 mainGameMechsRef->setLoseFlag();
                 break;

@@ -9,6 +9,8 @@ GameMechs::GameMechs()
 
     boardSizeX = 20;
     boardSizeY = 10;
+
+    debugFlag = false;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -23,6 +25,8 @@ GameMechs::GameMechs(int boardX, int boardY)
 
     if (boardY < 3) {boardSizeY = 10;}
     else {boardSizeY = boardY;}
+
+    debugFlag = false;
 }
 
 // do you need a destructor?
@@ -119,4 +123,14 @@ void GameMechs::generateFood(objPosArrayList* blockOff)
 objPos GameMechs::getFoodPos() const
 {
     return foodPos;
+}
+
+void GameMechs::toggleDebugFlag()
+{
+    debugFlag = !debugFlag;
+}
+
+bool GameMechs::getDebugFlagStatus()
+{
+    return debugFlag;
 }
